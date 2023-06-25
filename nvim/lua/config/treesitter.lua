@@ -17,6 +17,10 @@ function M.setup()
       enable = true,
     },
 
+		indent = {
+			enable = true,
+		},
+
 
 		-- nvim-treesitter-textobjects
     textobjects = {

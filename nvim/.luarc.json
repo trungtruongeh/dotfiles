@@ -44,5 +44,6 @@
         "/Users/austin/.config/nvim/after",
         "/Users/austin/.local/state/nvim/lazy/readme",
         "${3rd}/luassert/library"
-    ]
+    ],
+    "workspace.checkThirdParty": false
 }

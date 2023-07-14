@@ -3,6 +3,7 @@ local M = {}
 local utils = require "utils"
 local nls_utils = require "config.lsp.null-ls.utils"
 local nls_sources = require "null-ls.sources"
+local api = vim.api
 
 local method = require("null-ls").methods.FORMATTING
 
@@ -19,12 +20,26 @@ end
 
 function M.format()
   if M.autoformat then
-    vim.lsp.buf.formatting_sync(nil, 2000)
+    local buf = vim.api.nvim_get_current_buf()
+    local ft = vim.bo[buf].filetype
+    local have_nls = #require("null-ls.sources").get_available(ft, "NULL_LS_FORMATTING") > 0
+
+    local view = vim.fn.winsaveview()
+    vim.lsp.buf.format {
+      async = true,
+      filter = function(client)
+        if have_nls then
+          return client.name == "null-ls"
+        end
+        return client.name ~= "null-ls"
+      end,
+    }
+    vim.fn.winrestview(view)
   end
 end
 
-function M.setup(client, buf)
-  local filetype = vim.api.nvim_buf_get_option(buf, "filetype")
+function M.setup(client, bufnr)
+  local filetype = api.nvim_buf_get_option(bufnr, "filetype")
 
   local enable = false
   if M.has_formatter(filetype) then
@@ -33,15 +48,21 @@ function M.setup(client, buf)
     enable = not (client.name == "null-ls")
   end
 
-  client.resolved_capabilities.document_formatting = enable
-  client.resolved_capabilities.document_range_formatting = enable
-  if client.resolved_capabilities.document_formatting then
-    vim.cmd [[
-      augroup LspFormat
-        autocmd! * <buffer>
-        autocmd BufWritePre <buffer> lua require("config.lsp.null-ls.formatters").format()
-      augroup END
-    ]]
+  if not enable then
+    return
+  end
+
+  client.server_capabilities.documentFormattingProvder = enable
+  client.server_capabilities.documentRangeFormattingProvider = enable
+  if client.server_capabilities.documentFormattingProvider then
+    local lsp_format_grp = api.nvim_create_augroup("LspFormat", { clear = true })
+    api.nvim_create_autocmd("BufWritePre", {
+      callback = function()
+        vim.schedule(M.format)
+      end,
+      group = lsp_format_grp,
+      buffer = bufnr,
+    })
   end
 end
 

@@ -1,294 +1,271 @@
-local lspconfig = require('lspconfig')
-local lsp_status = require('lsp-status')
-local saga = require('lspsaga')
+local M = {}
 
-lsp_status.register_progress()
-lsp_status.config({
-  indicator_errors = 'E',
-  indicator_warnings = 'W',
-  indicator_info = 'i',
-  indicator_hint = '?',
-  indicator_ok = 'Ok',
-})
+-- local util = require "lspconfig.util"
 
-saga.setup({
-  lightbulb = {
-    enable = false
-  },
-  symbol_in_winbar = {
-    enable = false
-  },
-  ui = {
-    -- Gruvbox dark
-    colors = {
-      normal_bg = '#32302f',
-      title_bg = '#32302f',
-      fg = '#ebdbb2',
-      red = '#cc241d',
-      magenta = '#b16286',
-      yellow = '#d79921',
-      green = '#98971a',
-      cyan = '#689d6a',
-      blue = '#458588',
-      white = '#a89984',
-      black = '#282828',
+local servers = {
+  gopls = {
+    settings = {
+      gopls = {
+        hints = {
+          assignVariableTypes = true,
+          compositeLiteralFields = true,
+          compositeLiteralTypes = true,
+          constantValues = true,
+          functionTypeParameters = true,
+          parameterNames = true,
+          rangeVariableTypes = true,
+        },
+        semanticTokens = true,
+      },
     },
   },
-})
+  html = {},
+  jsonls = {
+    settings = {
+      json = {
+        schemas = require("schemastore").json.schemas(),
+      },
+    },
+  },
+  pyright = {
+    settings = {
+      python = {
+        analysis = {
+          typeCheckingMode = "off",
+          autoSearchPaths = true,
+          useLibraryCodeForTypes = true,
+          diagnosticMode = "workspace",
+        },
+      },
+    },
+  },
+  -- pylsp = {}, -- Integration with rope for refactoring - https://github.com/python-rope/pylsp-rope
+  rust_analyzer = {
+    settings = {
+      ["rust-analyzer"] = {
+        cargo = { allFeatures = true },
+        checkOnSave = {
+          command = "cargo clippy",
+          extraArgs = { "--no-deps" },
+        },
+      },
+    },
+  },
+  lua_ls = {
+    settings = {
+      Lua = {
+        runtime = {
+          -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+          version = "LuaJIT",
+          -- Setup your lua path
+          path = vim.split(package.path, ";"),
+        },
+        diagnostics = {
+          -- Get the language server to recognize the `vim` global
+          globals = { "vim", "describe", "it", "before_each", "after_each", "packer_plugins", "MiniTest" },
+          -- disable = { "lowercase-global", "undefined-global", "unused-local", "unused-vararg", "trailing-space" },
+        },
+        workspace = {
+          checkThirdParty = false,
+        },
+        completion = { callSnippet = "Replace" },
+        telemetry = { enable = false },
+        hint = {
+          enable = false,
+        },
+      },
+    },
+  },
+  tsserver = {
+    -- disable_formatting = true,
+    settings = {
+      javascript = {
+        inlayHints = {
+          includeInlayEnumMemberValueHints = true,
+          includeInlayFunctionLikeReturnTypeHints = true,
+          includeInlayFunctionParameterTypeHints = true,
+          includeInlayParameterNameHints = "all", -- 'none' | 'literals' | 'all';
+          includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+          includeInlayPropertyDeclarationTypeHints = true,
+          includeInlayVariableTypeHints = true,
+        },
+      },
+      typescript = {
+        inlayHints = {
+          includeInlayEnumMemberValueHints = true,
+          includeInlayFunctionLikeReturnTypeHints = true,
+          includeInlayFunctionParameterTypeHints = true,
+          includeInlayParameterNameHints = "all", -- 'none' | 'literals' | 'all';
+          includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+          includeInlayPropertyDeclarationTypeHints = true,
+          includeInlayVariableTypeHints = true,
+        },
+      },
+    },
+  },
+  vimls = {},
+  -- tailwindcss = {},
+  yamlls = {
+    schemastore = {
+      enable = true,
+    },
+    settings = {
+      yaml = {
+        hover = true,
+        completion = true,
+        validate = true,
+        schemas = require("schemastore").json.schemas(),
+      },
+    },
+  },
+  jdtls = {},
+  dockerls = {},
+  -- graphql = {},
+  bashls = {},
+  taplo = {},
+  -- omnisharp = {},
+  -- kotlin_language_server = {},
+  -- emmet_ls = {},
+  -- marksman = {},
+  -- angularls = {},
+  -- sqls = {
+  -- settings = {
+  --   sqls = {
+  --     connections = {
+  --       {
+  --         driver = "sqlite3",
+  --         dataSourceName = os.getenv "HOME" .. "/workspace/db/chinook.db",
+  --       },
+  --     },
+  --   },
+  -- },
+  -- },
+}
 
-vim.lsp.handlers['textDocument/publishDiagnostics'] = function(...)
-  vim.lsp.with(
-    vim.lsp.diagnostic.on_publish_diagnostics,
-    {
-      virtual_text = false,
-      underline = true,
-      update_in_insert = false,
-    }
-  )(...)
+function M.on_attach(client, bufnr)
+  local caps = client.server_capabilities
 
-  if vim.lsp.buf.server_ready() and vim.api.nvim_get_mode().mode ~= 'i' then
-    -- If the current win is a loclist, get its associated win
-    -- Ref: https://neovim.io/doc/user/builtin.html#getloclist()
-    local filewinid = vim.fn.getloclist(0, {filewinid = 0})['filewinid']
-    local winnr = filewinid ~= 0 and filewinid or 0;
+  -- Enable completion triggered by <C-X><C-O>
+  -- See `:help omnifunc` and `:help ins-completion` for more information.
+  if caps.completionProvider then
+    vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
+  end
 
-    pcall(vim.diagnostic.setloclist, {open = false, winnr = winnr})
+  -- Use LSP as the handler for formatexpr.
+  -- See `:help formatexpr` for more information.
+  if caps.documentFormattingProvider then
+    vim.bo[bufnr].formatexpr = "v:lua.vim.lsp.formatexpr()"
+  end
+
+  -- Configure key mappings
+  require("config.lsp.keymaps").setup(client, bufnr)
+
+  -- Configure highlighting
+  require("config.lsp.highlighter").setup(client, bufnr)
+
+  -- Configure formatting
+  require("config.lsp.null-ls.formatters").setup(client, bufnr)
+
+  -- tagfunc
+  if caps.definitionProvider then
+    vim.bo[bufnr].tagfunc = "v:lua.vim.lsp.tagfunc"
+  end
+
+  -- sqls
+  if client.name == "sqls" then
+    require("sqls").on_attach(client, bufnr)
+  end
+
+  -- Configure for jdtls
+  if client.name == "jdt.ls" then
+    require("jdtls").setup_dap { hotcodereplace = "auto" }
+    require("jdtls.dap").setup_dap_main_class_configs()
+    vim.lsp.codelens.refresh()
+  end
+
+  -- nvim-navic
+  if caps.documentSymbolProvider then
+    local navic = require "nvim-navic"
+    navic.attach(client, bufnr)
+  end
+
+  if client.name ~= "null-ls" then
+    -- inlay-hints
+    local ih = require "inlay-hints"
+    ih.on_attach(client, bufnr)
+
+    -- semantic highlighting -- https://github.com/neovim/neovim/pull/21100
+    -- if caps.semanticTokensProvider and caps.semanticTokensProvider.full then
+    --   local augroup = vim.api.nvim_create_augroup("SemanticTokens", {})
+    --   vim.api.nvim_create_autocmd("TextChanged", {
+    --     group = augroup,
+    --     buffer = bufnr,
+    --     callback = function()
+    --       vim.lsp.buf.semantic_tokens_full()
+    --     end,
+    --   })
+    --   -- fire it first time on load as well
+    --   vim.lsp.buf.semantic_tokens_full()
+    -- end
   end
 end
 
--- vim.api.nvim_create_augroup('diagnostics', {clear = true})
--- vim.api.nvim_create_autocmd('DiagnosticChanged', {
---   group = 'diagnostics',
---   callback = function()
---     if vim.api.nvim_get_mode().mode ~= 'i' then
---       vim.diagnostic.setloclist({open = false})
---     end
---   end,
--- })
-
-local signs = {Error = 'E ', Warn = 'W ', Hint = '? ', Info = 'i '}
-for type, icon in pairs(signs) do
-  local hl = 'DiagnosticSign' .. type
-  vim.fn.sign_define(hl, {text = icon, texthl = hl, numhl = hl})
-end
-
-local common_on_attach = function(client, bufnr)
-  lsp_status.on_attach(client)
-
-  local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
-  local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
-
-  buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
-
-  local opts = {noremap = true, silent = true}
-
-  buf_set_keymap('n', '<leader>lf', '<CMD>lua vim.lsp.buf.format({async = true})<CR>', opts)
-  buf_set_keymap('n', '<leader>ld', '<CMD>lua vim.lsp.buf.definition()<CR>', opts)
-  buf_set_keymap('n', '<leader>lv', '<CMD>vsplit | lua vim.lsp.buf.definition()<CR>', opts)
-  buf_set_keymap('n', '<leader>lr', '<CMD>lua vim.lsp.buf.references()<CR>', opts)
-  buf_set_keymap('n', '<leader>ll', '<CMD>lua vim.diagnostic.setloclist()<CR>', opts)
-
-  buf_set_keymap('n', '<leader>lh', ':Lspsaga hover_doc<CR>', opts)
-  buf_set_keymap('n', '<leader>ln', ':Lspsaga rename<CR>', opts)
-  buf_set_keymap('n', '<leader>lo', ':Lspsaga outline<CR>', opts)
-  buf_set_keymap('n', '<C-f>', ':lua require("lspsaga.action").smart_scroll_with_saga(1)<CR>', opts)
-  buf_set_keymap('n', '<C-b>', ':lua require("lspsaga.action").smart_scroll_with_saga(-1)<CR>', opts)
-end
-
 local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
-capabilities = vim.tbl_extend('keep', capabilities, lsp_status.capabilities)
-
--- npm install -g typescript typescript-language-server
-lspconfig.tsserver.setup({
-  on_attach = function(client, bufnr)
-    common_on_attach(client, bufnr)
-    client.server_capabilities.documentFormattingProvider = false
-  end,
-  capabilities = capabilities,
-  flags = {debounce_text_changes = 150},
-})
-
--- curl -fLO https://github.com/elixir-lsp/elixir-ls/releases/latest/download/elixir-ls.zip
--- unzip elixir-ls.zip -d /usr/local/bin/elixir-ls
--- chmod +x /usr/local/bin/elixir-ls/language_server.sh
-lspconfig.elixirls.setup({
-  cmd = {'/usr/local/bin/elixir-ls/language_server.sh'},
-  settings = {
-    ['elixirLS.dialyzerEnabled'] = true,
-    ['elixirLS.dialyzerFormat'] = 'dialyzer',
-    ['elixirLS.dialyzerWarnOpts'] = {},
-    ['elixirLS.fetchDeps'] = true,
-    ['elixirLS.mixEnv'] = 'test',
-    ['elixirLS.suggestSpecs'] = true,
+capabilities.textDocument.completion.completionItem.snippetSupport = true
+capabilities.textDocument.foldingRange = {
+  dynamicRegistration = false,
+  lineFoldingOnly = true,
+}
+capabilities.textDocument.completion.completionItem.resolveSupport = {
+  properties = {
+    "documentation",
+    "detail",
+    "additionalTextEdits",
   },
+}
+M.capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities) -- for nvim-cmp
 
-  on_attach = common_on_attach,
-  capabilities = capabilities,
-  flags = {debounce_text_changes = 150}
-})
-
--- npm install -g ocaml-language-server
--- opam switch create 4.06.0
--- eval $(opam env)
--- opam install reason merlin
-lspconfig.ocamlls.setup({
-  on_attach = common_on_attach,
-  capabilities = capabilities,
-  flags = {debounce_text_changes = 150}
-})
-
-lspconfig.rescriptls.setup({
-  cmd = {
-    'node',
-    '/Users/toannguyen/.local/share/nvim/lazy/vim-rescript/server/out/server.js',
-    '--stdio'
+local opts = {
+  on_attach = M.on_attach,
+  capabilities = M.capabilities,
+  flags = {
+    debounce_text_changes = 150,
   },
-
-  on_attach = common_on_attach,
-  capabilities = capabilities,
-  flags = {debounce_text_changes = 150}
-})
-
--- gem install solargraph
-lspconfig.solargraph.setup({
-  on_attach = function(client, bufnr)
-    common_on_attach(client, bufnr)
-    client.server_capabilities.documentFormattingProvider = false
-    client.server_capabilities.definitionProvider = false
-  end,
-  capabilities = capabilities,
-  flags = {debounce_text_changes = 150}
-})
-
--- go install golang.org/x/tools/gopls@latest
-lspconfig.gopls.setup({
-  on_attach = common_on_attach,
-  capabilities = capabilities,
-  flags = {debounce_text_changes = 150}
-})
-
--- brew install rust-analyzer
-lspconfig.rust_analyzer.setup({
-  on_attach = common_on_attach,
-  capabilities = capabilities,
-  flags = {debounce_text_changes = 150}
-})
-
--- vim.cmd [[
---   autocmd BufEnter,BufWinEnter,TabEnter *.rs :lua require('lsp_extensions').inlay_hints({})
--- ]]
-
--- brew install lua-language-server
-lspconfig.lua_ls.setup({
-  settings = {
-    Lua = {
-      runtime = {
-        version = 'LuaJIT',
-      },
-      diagnostics = {
-        globals = {'vim', 'hs', 'spoon'},
-      },
-      workspace = {
-        library = vim.api.nvim_get_runtime_file('', true),
-      },
-      telemetry = {
-        enable = false,
-      },
-    }
-  },
-
-  on_attach = common_on_attach,
-  capabilities = capabilities,
-  flags = {debounce_text_changes = 150}
-})
-
--- brew install llvm
-lspconfig.clangd.setup({
-  on_attach = common_on_attach,
-  capabilities = capabilities,
-  flags = {debounce_text_changes = 150}
-})
-
--- brew install ltex-ls
-lspconfig.ltex.setup({
-  cmd = {'ltex-ls'},
-  filetypes = {'markdown'},
-  root_dir = lspconfig.util.find_git_ancestor,
-  settings = {
-    ltex = {
-      enabled = {'markdown'},
-      checkFrequency = 'save',
-      language = 'en-US',
-      diagnosticSeverity = 'information',
-      setenceCacheSize = 2000,
-      additionalRules = {
-        enablePickyRules = true,
-        motherTongue = 'en-US',
-      },
-      dictionary = {},
-      disabledRules = {
-        ['en-US'] = {
-          'EN_QUOTES',
-          'UPPERCASE_SENTENCE_START',
-        },
-      },
-      hiddenFalsePositives = {},
-    },
-  },
-
-  on_attach = common_on_attach,
-  capabilities = capabilities,
-  flags = {debounce_text_changes = 150}
-})
-
-local prettier = {
-  formatCommand = 'prettier --stdin-filepath ${INPUT}',
-  formatStdin = true,
 }
 
-local eslint = {
-  lintCommand = 'eslint_d -f visualstudio --stdin --stdin-filename ${INPUT}',
-  lintIgnoreExitCode = true,
-  lintStdin = true,
-  lintFormats = {'%f(%l,%c): %tarning %m', '%f(%l,%c): %trror %m'},
-}
+-- Setup LSP handlers
+require("config.lsp.handlers").setup()
 
-local rubocop = {
-  lintCommand = 'rubocop --format emacs --force-exclusion --stdin ${INPUT}',
-  lintIgnoreExitCode = true,
-  lintStdin = true,
-  lintFormats = {'%f:%l:%c: %t: %m'},
-  formatCommand = 'rubocop --auto-correct --force-exclusion --stdin ${INPUT} 2>/dev/null | sed "1,/^====================$/d"',
-  formatStdin = true,
-}
+function M.setup()
+  -- null-ls
+  require("config.lsp.null-ls").setup(opts)
 
-local pandoc = {
-  formatCommand = 'pandoc -f gfm -t gfm -sp --tab-stop=2 --wrap=none',
-  formatStdin = true,
-}
+  -- Installer
+  require("config.lsp.installer").setup(servers, opts)
 
--- brew install efm-langserver
--- npm install -g eslint_d
-lspconfig.efm.setup({
-  root_dir = lspconfig.util.root_pattern('.git', 'package.json'),
-  init_options = {documentFormatting = true, codeAction = false},
-  filetypes = {'javascript', 'javascriptreact', 'typescript', 'typescriptreact', 'ruby', 'json', 'markdown'},
-  settings = {
-    languages = {
-      javascript = {prettier, eslint},
-      javascriptreact = {prettier, eslint},
-      typescript = {prettier, eslint},
-      typescriptreact = {prettier, eslint},
-      ruby = {rubocop},
-      json = {prettier},
-      markdown = {pandoc},
-    }
-  },
+  -- Inlay hints
+  -- require("config.lsp.inlay-hints").setup()
+end
 
-  on_attach = function(client, bufnr)
-    common_on_attach(client, bufnr)
-    client.server_capabilities.definitionProvider = false
-  end,
-  flags = {debounce_text_changes = 150}
-})
+local diagnostics_active = true
+
+function M.toggle_diagnostics()
+  diagnostics_active = not diagnostics_active
+  if diagnostics_active then
+    vim.diagnostic.show()
+  else
+    vim.diagnostic.hide()
+  end
+end
+
+function M.remove_unused_imports()
+  vim.diagnostic.setqflist { severity = vim.diagnostic.severity.WARN }
+  vim.cmd "packadd cfilter"
+  vim.cmd "Cfilter /main/"
+  vim.cmd "Cfilter /The import/"
+  vim.cmd "cdo normal dd"
+  vim.cmd "cclose"
+  vim.cmd "wa"
+end
+
+return M

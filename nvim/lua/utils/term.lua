@@ -2,11 +2,12 @@ local M = {}
 
 local Terminal = require("toggleterm.terminal").Terminal
 
--- local git_tui = "lazygit"
-local git_tui = "gitui"
+-- Git client
+local git_tui = "lazygit"
 
 local git_client = Terminal:new {
   cmd = git_tui,
+  dir = "git_dir",
   hidden = true,
   direction = "float",
   float_opts = {

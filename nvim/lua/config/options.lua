@@ -20,10 +20,10 @@ opt.mouse = "a" --Enable mouse mode
 opt.undofile = true --Save undo history
 opt.ignorecase = true --Case insensitive searching unless /C or capital in search
 opt.smartcase = true -- Smart case
-opt.updatetime = 250 --Decrease update time
+opt.updatetime = 500 --Decrease update time
 opt.signcolumn = "yes" -- Always show sign column
 opt.clipboard = "unnamedplus" -- Access system clipboard
-opt.timeoutlen = 300	--	Time in milliseconds to wait for a mapped sequence to complete.
+opt.timeoutlen = 500	--	Time in milliseconds to wait for a mapped sequence to complete.
 opt.ttimeoutlen = -1
 
 -- Highlight on yank

@@ -93,6 +93,6 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
 vim.cmd([[
   augroup autosave
     autocmd!
-    autocmd InsertLeave * :write
+    autocmd InsertLeave * update
   augroup END
 ]])

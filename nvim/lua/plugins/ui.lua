@@ -6,6 +6,14 @@ return {
       vim.g.everforest_better_performance = 1
       vim.cmd.colorscheme [[everforest]]
     end,
+    enabled = false,
+  },
+  {
+    'sainnhe/sonokai',
+    config = function()
+      vim.g.sonokai_style = "atlantis"
+      vim.cmd.colorscheme [[sonokai]]
+    end,
     enabled = true,
   },
   

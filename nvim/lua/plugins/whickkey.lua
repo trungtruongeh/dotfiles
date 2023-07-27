@@ -35,10 +35,12 @@ return {
       f = {
         name = "Find",
         f = { "<cmd>Telescope find_files<cr>", "Find File" },
+        h = { "<cmd>Telescope find_files hidden=true<cr>", "Find Hidden File" },
         b = { "<cmd>Telescope buffers<cr>", "Buffers" },
         g = { "<cmd>Telescope live_grep<cr>", "Live Grep" },
         c = { "<cmd>Telescope commands<cr>", "Commands" },
         e = { "<cmd>NvimTreeToggle<cr>", "Explorer" },
+        p = { "<cmd>Telescope projects<cr>", "Projects" },
       },
 
       s = {

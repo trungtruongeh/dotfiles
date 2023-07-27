@@ -1,33 +1,4 @@
-_G.dump = function(...)
-  print(vim.inspect(...))
-end
-
-_G.prequire = function(...)
-  local status, lib = pcall(require, ...)
-  if status then
-    return lib
-  end
-  return nil
-end
-
-_G.reload = function(module)
-  local r = require "plenary.reload"
-  r.reload_module(module)
-end
-
 local M = {}
-
-function M.t(str)
-  return vim.api.nvim_replace_termcodes(str, true, true, true)
-end
-
-function M.exists(list, val)
-  local set = {}
-  for _, l in ipairs(list) do
-    set[l] = true
-  end
-  return set[val]
-end
 
 function M.log(msg, hl, name)
   name = name or "Neovim"

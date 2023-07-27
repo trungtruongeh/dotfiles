@@ -1,27 +1,63 @@
-local g = vim.g
+local M = {}
 
--- Disable some builtin vim plugins
-local disabled_built_ins = {
-  "2html_plugin",
-  "getscript",
-  "getscriptPlugin",
-  "gzip",
-  "logipat",
-  -- "netrw",
-  -- "netrwPlugin",
-  -- "netrwSettings",
-  -- "netrwFileHandlers",
-  "matchit",
-  "matchparen",
-  "tar",
-  "tarPlugin",
-  "rrhelper",
-  "vimball",
-  "vimballPlugin",
-  "zip",
-  "zipPlugin",
-}
+-- icons used by other plugins
+M.icons = {
+    dap = {
+      Stopped = { "󰁕 ", "DiagnosticWarn", "DapStoppedLine" },
+      Breakpoint = " ",
+      BreakpointCondition = " ",
+      BreakpointRejected = { " ", "DiagnosticError" },
+      LogPoint = ".>",
+    },
+    diagnostics = {
+      Error = " ",
+      Warn = " ",
+      Hint = " ",
+      Info = " ",
+    },
+    git = {
+      added = " ",
+      modified = " ",
+      removed = " ",
+    },
+    kinds = {
+      Array = " ",
+      Boolean = " ",
+      Class = " ",
+      Color = " ",
+      Constant = " ",
+      Constructor = " ",
+      Copilot = " ",
+      Enum = " ",
+      EnumMember = " ",
+      Event = " ",
+      Field = " ",
+      File = " ",
+      Folder = " ",
+      Function = " ",
+      Interface = " ",
+      Key = " ",
+      Keyword = " ",
+      Method = " ",
+      Module = " ",
+      Namespace = " ",
+      Null = " ",
+      Number = " ",
+      Object = " ",
+      Operator = " ",
+      Package = " ",
+      Property = " ",
+      Reference = " ",
+      Snippet = " ",
+      String = " ",
+      Struct = " ",
+      Text = " ",
+      TypeParameter = " ",
+      Unit = " ",
+      Value = " ",
+      Variable = " ",
+    },
+  }
 
-for _, plugin in pairs(disabled_built_ins) do
-  g["loaded_" .. plugin] = 1
-end
+
+return M

@@ -9,6 +9,7 @@ return {
         "stylua",
         "shfmt",
         -- "flake8",
+        "solargraph",
       },
     },
     ---@param opts MasonSettings | {ensure_installed: string[]}

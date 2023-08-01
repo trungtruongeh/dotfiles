@@ -10,6 +10,15 @@ local prettier = {
   formatStdin = true,
 }
 
+local rubocop = {
+  lintCommand = 'rubocop --format emacs --force-exclusion --stdin ${INPUT}',
+  lintIgnoreExitCode = true,
+  lintStdin = true,
+  lintFormats = {'%f:%l:%c: %t: %m'},
+  formatCommand = 'rubocop --auto-correct --force-exclusion --stdin ${INPUT} 2>/dev/null | sed "1,/^====================$/d"',
+  formatStdin = true,
+}
+
 return {
   'nvim-lua/lsp-status.nvim',
   'nvimdev/lspsaga.nvim',
@@ -109,7 +118,7 @@ return {
         local keymap_g = {
           name = "Goto",
           d = { "<Cmd>lua vim.lsp.buf.definition()<CR>", "Definition" },
-          -- d = { "<cmd>lua require('goto-preview').goto_preview_definition()<CR>", "Definition" },
+          p = { "<cmd>lua require('goto-preview').goto_preview_definition()<CR>", "Definition" },
           D = { "<Cmd>lua vim.lsp.buf.declaration()<CR>", "Declaration" },
           h = { "<cmd>lua vim.lsp.buf.signature_help()<CR>", "Signature Help" },
           I = { "<cmd>Telescope lsp_implementations<CR>", "Goto Implementation" },
@@ -156,6 +165,15 @@ return {
         capabilities = capabilities,
         flags = {debounce_text_changes = 150},
       })
+      lspconfig.solargraph.setup({
+        on_attach = function(client, bufnr)
+          common_on_attach(client, bufnr)
+          client.server_capabilities.documentFormattingProvider = false
+          -- client.server_capabilities.definitionProvider = false
+        end,
+        capabilities = capabilities,
+        flags = {debounce_text_changes = 150}
+      })
       require("typescript").setup({
         server = {
           on_attach = function(client, bufnr)
@@ -201,6 +219,7 @@ return {
             typescript = {prettier, eslint},
             typescriptreact = {prettier, eslint},
             json = {prettier},
+            ruby = {rubocop},
           }
         },
 

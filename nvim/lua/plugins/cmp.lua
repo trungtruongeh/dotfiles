@@ -7,7 +7,6 @@ local feedkey = function(key, mode)
   vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, true, true), mode, true)
 end
 
-
 return {
   "hrsh7th/cmp-buffer",
   "hrsh7th/cmp-nvim-lsp",

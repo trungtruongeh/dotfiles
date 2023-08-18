@@ -2,6 +2,7 @@ return {
   "folke/which-key.nvim",
   config = function()
     local whichkey = require "which-key"
+    local utils = require("utils")
 
     local conf = {
       window = {
@@ -21,6 +22,7 @@ return {
 
     local mappings = {
       ["1"] = { "<cmd>ToggleTerm<CR>", "Open Terminal" },
+      ["2"] = { "<cmd>TransparentToggle<CR>", "Toggle background transparent" },
       ["w"] = { "<cmd>update!<CR>", "Save" },
       ["q"] = { "<cmd>q!<CR>", "Quit" },
 
@@ -30,6 +32,13 @@ return {
 
       c = {
         name = "Code"
+      },
+
+      C = {
+        name = "Circle CI",
+        a = { "<cmd>CCMyPipelines<cr>", "List and open" },
+        t = { "<cmd>lua require('telescope').extensions.circleci.get_pipelines()<cr>", "List and preview" },
+        o = { "<cmd>lua require('utils').openCurrentCIBranch()<cr>", "Open branch" }
       },
 
       f = {

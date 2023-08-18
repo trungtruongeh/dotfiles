@@ -29,6 +29,7 @@ return {
     vim.api.nvim_set_hl(0, "CmpGhostText", { link = "Comment", default = true })
     local cmp = require("cmp")
     local cmp_action = require('lsp-zero').cmp_action()
+    local luasnip = require('luasnip')
     local defaults = require("cmp.config.default")()
     return {
       completion = {
@@ -54,6 +55,8 @@ return {
         ['<Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_next_item({behavior = cmp.SelectBehavior.Insert})
+      elseif luasnip.expand_or_jumpable() then
+        luasnip.expand_or_jump()
       elseif has_words_before() then
         cmp.complete()
       else
@@ -64,6 +67,8 @@ return {
     ['<S-Tab>'] = cmp.mapping(function()
       if cmp.visible() then
         cmp.select_prev_item({behavior = cmp.SelectBehavior.Insert})
+      elseif luasnip.expand_or_jumpable() then
+        luasnip.expand_or_jump()
       end
     end, {'i', 's'}),
       }),

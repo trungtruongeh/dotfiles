@@ -37,8 +37,8 @@ return {
       C = {
         name = "Circle CI",
         a = { "<cmd>CCMyPipelines<cr>", "List and open" },
-        t = { "<cmd>lua require('telescope').extensions.circleci.get_pipelines()<cr>", "List and preview" },
-        o = { "<cmd>lua require('utils').openCurrentCIBranch()<cr>", "Open branch" }
+        t = { "<cmd>lua require('telescope').extensions.circleci.get_pipelines()<cr>", "List Telescope" },
+        o = { "<cmd>lua require('utils').openCurrentCIBranch()<cr>", "Open current branch" }
       },
 
       f = {

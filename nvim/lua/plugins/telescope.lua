@@ -3,7 +3,7 @@ return {
   {
     "nvim-telescope/telescope.nvim",
     tag = "0.1.2",
-    dependencies = { "nvim-lua/plenary.nvim" },
+    dependencies = { "nvim-lua/plenary.nvim", "tomoakley/circleci.nvim" },
     config = function()
       require("telescope").setup {
         extensions = {
@@ -20,6 +20,7 @@ return {
       -- load_extension, somewhere after setup function:
       require("telescope").load_extension "fzf"
       require("telescope").load_extension "projects"
+      require("telescope").load_extension("circleci")
     end,
   },
 }

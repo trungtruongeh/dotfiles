@@ -58,7 +58,7 @@ return {
     dependencies = { "noice.nvim" },
     keys = {
       {
-        "<leader>nd",
+        "<leader>3",
         function()
           require("notify").dismiss({ silent = true, pending = true })
         end,

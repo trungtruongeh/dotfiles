@@ -2,7 +2,7 @@ return {
   "folke/which-key.nvim",
   config = function()
     local whichkey = require "which-key"
-    local utils = require("utils")
+    local utils = require "utils"
 
     local conf = {
       window = {
@@ -31,14 +31,14 @@ return {
       },
 
       c = {
-        name = "Code"
+        name = "Code",
       },
 
       C = {
         name = "Circle CI",
         a = { "<cmd>CCMyPipelines<cr>", "List and open" },
         t = { "<cmd>lua require('telescope').extensions.circleci.get_pipelines()<cr>", "List Telescope" },
-        o = { "<cmd>lua require('utils').openCurrentCIBranch()<cr>", "Open current branch" }
+        o = { "<cmd>lua require('utils').openCurrentCIBranch()<cr>", "Open current branch" },
       },
 
       f = {
@@ -55,15 +55,11 @@ return {
       s = {
         name = "Search",
         s = { "<cmd>Telescope grep_string<cr>", "Grep String" },
-        r = { "<cmd>Spectre<cr>",  "Replace in files (Spectre)" },
+        r = { "<cmd>Spectre<cr>", "Replace in files (Spectre)" },
       },
 
       x = {
         name = "Trouble",
-      },
-
-      n = {
-        name = "Notification"
       },
 
       g = {
@@ -74,7 +70,7 @@ return {
           "Link",
         },
         z = { "<cmd>lua require('utils.term').git_client_toggle()<CR>", "LazyGit" },
-      }
+      },
     }
 
     local function code_keymap()
@@ -138,6 +134,5 @@ return {
     whichkey.register(mappings, opts)
 
     code_keymap()
-
-  end
+  end,
 }

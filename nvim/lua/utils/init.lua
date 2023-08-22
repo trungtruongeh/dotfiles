@@ -1,5 +1,12 @@
 local M = {}
 
+function M.getCurrentProject()
+  local currentDir = vim.fn.getcwd()
+  local subDirs = vim.fn.split(currentDir, "/")
+  local currentProject = subDirs[#subDirs]
+  return currentProject
+end
+
 function M.openLink(link)
   os.execute("open " .. link)
 end

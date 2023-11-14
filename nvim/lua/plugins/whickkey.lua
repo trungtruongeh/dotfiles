@@ -37,6 +37,7 @@ return {
 
       c = {
         name = "Code",
+        a = { "<cmd>lua vim.lsp.buf.code_action()<CR>", "Code Action" },
       },
 
       C = {
@@ -54,12 +55,9 @@ return {
         c = { "<cmd>Telescope commands<cr>", "Commands" },
         e = { "<cmd>NvimTreeToggle<cr>", "Explorer" },
         p = { "<cmd>Telescope projects<cr>", "Projects" },
-      },
-
-      s = {
-        name = "Search",
-        s = { "<cmd>Telescope grep_string<cr>", "Grep String" },
+                s = { "<cmd>Telescope grep_string<cr>", "Grep String" },
         r = { "<cmd>Spectre<cr>", "Replace in files (Spectre)" },
+
       },
 
       x = {
@@ -100,12 +98,12 @@ return {
         elseif ft == "typescript" or ft == "typescriptreact" or ft == "javascript" or ft == "javascriptreact" then
           keymap_c = {
             name = "Code",
-            o = { "<cmd>TypescriptOrganizeImports<cr>", "Organize Imports" },
+            -- o = { "<cmd>TypescriptOrganizeImports<cr>", "Organize Imports" },
             r = { "<cmd>TypescriptRenameFile<cr>", "Rename File" },
             i = { "<cmd>TypescriptAddMissingImports<cr>", "Import Missing" },
-            F = { "<cmd>TypescriptFixAll<cr>", "TypeScript Fix All" },
+            f = { "<cmd>EslintFixAll<cr>", "Fix All Eslint Error" },
             u = { "<cmd>TypescriptRemoveUnused<cr>", "Remove Unused" },
-            R = { "<cmd>lua require('config.test').javascript_runner()<cr>", "Choose Test Runner" },
+            -- R = { "<cmd>lua require('config.test').javascript_runner()<cr>", "Choose Test Runner" },
             -- s = { "<cmd>2TermExec cmd='yarn start'<cr>", "Yarn Start" },
             -- t = { "<cmd>2TermExec cmd='yarn test'<cr>", "Yarn Test" },
           }

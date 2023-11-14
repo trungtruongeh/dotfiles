@@ -2,6 +2,7 @@ return {
   { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
   {
     "nvim-telescope/telescope.nvim",
+    event = "VimEnter",
     tag = "0.1.2",
     dependencies = { "nvim-lua/plenary.nvim" },
     config = function()

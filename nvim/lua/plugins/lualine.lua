@@ -3,7 +3,7 @@ return {
   {
     'nvim-lualine/lualine.nvim',
     event = "BufReadPre",
-    dependencies = { 'nvim-tree/nvim-web-devicons', opt = true },
+    dependencies = { 'nvim-tree/nvim-web-devicons', 'folke/noice.nvim', opt = true },
     options = { theme = 'everforest' },
     config = function()
       local gps = require "nvim-gps"

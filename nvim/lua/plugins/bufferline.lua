@@ -1,5 +1,6 @@
 return {
   "akinsho/bufferline.nvim",
+  dependencies = { "echasnovski/mini.nvim" },
   event = "VeryLazy",
   keys = {
     { "<leader>bd", "<Cmd>bd!<Cr>", desc = "Delete buffer" },

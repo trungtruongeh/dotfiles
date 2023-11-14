@@ -27,6 +27,7 @@ opt.signcolumn = "yes" -- Always show sign column
 opt.clipboard = "unnamedplus" -- Access system clipboard
 opt.timeoutlen = 500	--	Time in milliseconds to wait for a mapped sequence to complete.
 opt.ttimeoutlen = -1
+-- opt.lazyredraw = true
 
 -- Highlight on yank
 vim.cmd [[

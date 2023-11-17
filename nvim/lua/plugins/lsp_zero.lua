@@ -1,3 +1,18 @@
+local prettier = {
+  formatCommand = "prettier --stdin-filepath ${INPUT}",
+  formatStdin = true,
+}
+
+local rubocop = {
+  lintCommand = "bundle exec rubocop --format emacs --force-exclusion",
+  lintIgnoreExitCode = true,
+  lintStdin = true,
+  lintFormats = { "%f:%l:%c: %t: %m" },
+  formatCommand =
+  'bundle exec rubocop --auto-correct --force-exclusion 2>/dev/null | sed "1,/^====================$/d"',
+  formatStdin = true,
+}
+
 local function setupCmp()
   local cmp = require "cmp"
   local cmp_action = require("lsp-zero").cmp_action()
@@ -6,7 +21,7 @@ local function setupCmp()
     paths = { '/snippets' }
   })
 
-  cmp.setup {
+  cmp.setup({
     preselect = "item",
     sources = {
       { name = "copilot" },
@@ -42,45 +57,69 @@ local function setupCmp()
         require("copilot_cmp.comparators").prioritize,
       },
     }
-  }
+  })
 end
 
 return {
---- Uncomment these if you want to manage LSP servers from neovim
--- {'williamboman/mason.nvim'},
--- {'williamboman/mason-lspconfig.nvim'},
+  --- Uncomment these if you want to manage LSP servers from neovim
+  -- {'williamboman/mason.nvim'},
+  -- {'williamboman/mason-lspconfig.nvim'},
 
-{'neovim/nvim-lspconfig'},
-{'hrsh7th/cmp-nvim-lsp'},
-{'hrsh7th/nvim-cmp'},
-{'L3MON4D3/LuaSnip'},
-  {"onsails/lspkind.nvim"},
+  { 'neovim/nvim-lspconfig' },
+  { 'hrsh7th/cmp-nvim-lsp' },
+  { 'hrsh7th/nvim-cmp' },
+  { 'L3MON4D3/LuaSnip' },
+  { "onsails/lspkind.nvim" },
   {
     'VonHeikemen/lsp-zero.nvim',
     branch = 'v3.x',
     event = "BufEnter",
-    dependencies = { "jose-elias-alvarez/typescript.nvim" },
+    dependencies = { "jose-elias-alvarez/typescript.nvim", "nvim-lua/lsp-status.nvim" },
     config = function()
-      local lsp_zero = require('lsp-zero')
+      local lsp_zero = require('lsp-zero').preset {}
+      local lsp_status = require "lsp-status"
 
-      lsp_zero.on_attach(function(_, bufnr)
-        lsp_zero.default_keymaps({buffer = bufnr})
+      lsp_zero.extend_lspconfig()
 
-        local opts = { noremap = true, silent = true, buffer = true }
-        local keymap = vim.keymap.set
+      lsp_zero.on_attach(function(client, bufnr)
+        lsp_zero.default_keymaps({ buffer = bufnr })
 
-        keymap("n", "<leader>lr", "<CMD>lua vim.lsp.buf.references()<CR>", opts)
-        keymap("n", "<leader>ll", "<CMD>lua vim.diagnostic.setloclist()<CR>", opts)
+        local whichkey = require "which-key"
+
+        local keymap_c = {
+          c = {}
+        };
+
+        if client.server_capabilities.documentFormattingProvider then
+          keymap_c.c.f = { "<cmd>lua vim.lsp.buf.format({async = true})<CR>", "Format Document" }
+        end
+
+        local keymap_g = {
+          name = "Goto",
+          d = { "<Cmd>lua vim.lsp.buf.definition()<CR>", "Definition" },
+          p = { "<cmd>lua require('goto-preview').goto_preview_definition()<CR>", "Preview Definition" },
+          D = { "<Cmd>lua vim.lsp.buf.declaration()<CR>", "Declaration" },
+          h = { "<cmd>lua vim.lsp.buf.signature_help()<CR>", "Signature Help" },
+          i = { "<cmd>Telescope lsp_implementations<CR>", "Goto Implementation" },
+          t = { "<cmd>lua vim.lsp.buf.type_definition()<CR>", "Goto Type Definition" },
+          r = { "<cmd>lua vim.lsp.buf.references()<CR>", "References" },
+        }
+
+        local o = { buffer = bufnr, prefix = "<leader>" }
+        whichkey.register(keymap_c, o)
+
+        o = { buffer = bufnr, prefix = "g" }
+        whichkey.register(keymap_g, o)
       end)
 
       lsp_zero.set_sign_icons({
-  error = '✘',
-  warn = '▲',
-  hint = '⚑',
-  info = '»'
-})
+        error = '✘',
+        warn = '▲',
+        hint = '⚑',
+        info = '»'
+      })
 
-      lsp_zero.setup_servers({'lua_ls', 'rust_analyzer'})
+      lsp_zero.setup_servers({ 'lua_ls', 'rust_analyzer' })
 
       require('lspconfig').tsserver.setup({
         on_init = function(client)
@@ -90,35 +129,17 @@ return {
         end,
       })
       require('lspconfig').eslint.setup({})
-      require('lspconfig').rubocop.setup({})
-      require('lspconfig').solargraph.setup({})
 
-      -- lsp_zero.format_mapping('gq', {
-      --   format_opts = {
-      --     async = false,
-      --     timeout_ms = 10000,
-      --   },
-      --   servers = {
-      --     ['tsserver'] = {'javascript', 'typescript', 'javascriptreact', 'typescriptreact'},
-      --     ['eslint'] = {'javascript', 'typescript', 'javascriptreact', 'typescriptreact'},
-      --     ['lua_ls'] = {'lua'},
-      --     ['rust_analyzer'] = {'rust'},
-      --     ['rubocop'] = {'ruby'},
-      --     ['solargraph'] = {'ruby'},
-      --   }
+      -- require('lspconfig').rubocop.setup({
+      --   cmd = { "rubocop", "--format", "emacs", "--force-exclusion" }
       -- })
-      --
 
-      vim.opt.signcolumn = "yes"
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = "ruby",
-  callback = function()
-    vim.lsp.start {
-      name = "rubocop",
-      cmd = { "bundle", "exec", "rubocop", "--lsp" },
-    }
-  end,
-})
+      require('lspconfig').solargraph.setup({
+        on_attach = function(client)
+          client.server_capabilities.documentFormattingProvider = false
+          client.server_capabilities.documentFormattingRangeProvider = false
+        end,
+      })
 
       require("typescript").setup {
         server = {
@@ -152,11 +173,40 @@ vim.api.nvim_create_autocmd("FileType", {
         },
       }
 
+      local lspconfig = require "lspconfig"
+      lspconfig.efm.setup {
+        root_dir = lspconfig.util.root_pattern(".git", "package.json", "Gemfile"),
+        init_options = { documentFormatting = true, codeAction = false },
+        filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "ruby", "json", "markdown" },
+        settings = {
+          languages = {
+            javascript = { prettier },
+            javascriptreact = { prettier },
+            typescript = { prettier },
+            typescriptreact = { prettier },
+            json = { prettier },
+            ruby = { rubocop },
+          },
+        },
 
-
+        on_attach = function(client, bufnr)
+          client.server_capabilities.definitionProvider = false
+          client.server_capabilities.documentFormattingProvider = true
+          client.server_capabilities.documentFormattingRangeProvider = true
+        end,
+        flags = { debounce_text_changes = 150 },
+      }
 
       setupCmp()
+
+      lsp_zero.setup()
     end
   },
-
+  {
+    "j-hui/fidget.nvim",
+    event = "BufEnter",
+    opts = {
+      -- options
+    },
+  }
 }

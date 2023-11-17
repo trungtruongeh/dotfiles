@@ -55,7 +55,7 @@ return {
         c = { "<cmd>Telescope commands<cr>", "Commands" },
         e = { "<cmd>NvimTreeToggle<cr>", "Explorer" },
         p = { "<cmd>Telescope projects<cr>", "Projects" },
-                s = { "<cmd>Telescope grep_string<cr>", "Grep String" },
+        s = { "<cmd>Telescope grep_string<cr>", "Grep String" },
         r = { "<cmd>Spectre<cr>", "Replace in files (Spectre)" },
 
       },
@@ -101,7 +101,7 @@ return {
             -- o = { "<cmd>TypescriptOrganizeImports<cr>", "Organize Imports" },
             r = { "<cmd>TypescriptRenameFile<cr>", "Rename File" },
             i = { "<cmd>TypescriptAddMissingImports<cr>", "Import Missing" },
-            f = { "<cmd>EslintFixAll<cr>", "Fix All Eslint Error" },
+            F = { "<cmd>EslintFixAll<cr>", "Fix All Eslint Error" },
             u = { "<cmd>TypescriptRemoveUnused<cr>", "Remove Unused" },
             -- R = { "<cmd>lua require('config.test').javascript_runner()<cr>", "Choose Test Runner" },
             -- s = { "<cmd>2TermExec cmd='yarn start'<cr>", "Yarn Start" },

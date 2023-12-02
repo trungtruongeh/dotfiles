@@ -1,10 +1,20 @@
 font:
   normal:
-    family: MesloLGSDZ Nerd Font
-  size: 12.5
+    family: FiraCode Nerd Font
+    style: Regular
+  bold:
+    family: FiraCode Nerd Font
+    style: Bold
+  italic:
+    family: FiraCode Nerd Font
+    style: Italic
+  bold_italic:
+    family: FiraCode Nerd Font
+    style: Bold Italic
+  size: 14
 
-window:
-  #  opacity: 0.6
+# window:
+#   opacity: 0.8
 
 colors:
   primary:

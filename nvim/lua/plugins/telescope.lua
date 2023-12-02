@@ -1,10 +1,12 @@
 return {
+  'junegunn/fzf.vim',
+  'junegunn/fzf',
   { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
   {
     "nvim-telescope/telescope.nvim",
     event = "VimEnter",
     tag = "0.1.2",
-    dependencies = { "nvim-lua/plenary.nvim" },
+    dependencies = { "nvim-lua/plenary.nvim",  "nvim-telescope/telescope-fzf-native.nvim", 'junegunn/fzf' },
     config = function()
       local telescope = require("telescope")
       telescope.setup {

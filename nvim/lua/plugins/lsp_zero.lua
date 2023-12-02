@@ -9,7 +9,7 @@ local rubocop = {
   lintStdin = true,
   lintFormats = { "%f:%l:%c: %t: %m" },
   formatCommand =
-  'bundle exec rubocop --auto-correct --force-exclusion 2>/dev/null | sed "1,/^====================$/d"',
+  'bundle exec rubocop --auto-correct --force-exclusion --stdin {} 2>/dev/null | sed "1,/^====================$/d"',
   formatStdin = true,
 }
 

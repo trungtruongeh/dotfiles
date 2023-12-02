@@ -13,28 +13,15 @@ return {
   },
   opts = {
     options = {
+      separator_style = "slant",
       close_command = function(n) require("mini.bufremove").delete(n, false) end,
       right_mouse_command = function(n) require("mini.bufremove").delete(n, false) end,
       diagnostics = "nvim_lsp",
       always_show_bufferline = true,
       diagnostics_indicator = function(count, level, diagnostics_dict, context)
-
-        -- local icons = require("config").icons.diagnostics
-        -- -- local ret = (diag.error and icons.Error .. diag.error .. " " or "")
-        --   .. (diag.warning and icons.Warn .. diag.warning or "")
-        -- return vim.trim(ret)
-
         local icon = level:match("error") and " " or " "
         return " " .. icon .. count
       end,
-      -- offsets = {
-      --   {
-      --     filetype = "neo-tree",
-      --     text = "Neo-tree",
-      --     highlight = "Directory",
-      --     text_align = "left",
-      --   },
-      -- },
     },
   },
 }

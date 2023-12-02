@@ -23,6 +23,7 @@ return {
     local mappings = {
       ["1"] = { "<cmd>ToggleTerm<CR>", "Open Terminal" },
       ["2"] = { "<cmd>TransparentToggle<CR>", "Toggle background transparent" },
+      ["3"] = { "<cmd>NeoAI<CR>", "Toggle ChatGPT" },
       ["w"] = { "<cmd>update!<CR>", "Save" },
       ["q"] = { "<cmd>q!<CR>", "Quit" },
 

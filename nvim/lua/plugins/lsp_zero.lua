@@ -97,7 +97,6 @@ return {
         local keymap_g = {
           name = "Goto",
           d = { "<Cmd>lua vim.lsp.buf.definition()<CR>", "Definition" },
-          p = { "<cmd>lua require('goto-preview').goto_preview_definition()<CR>", "Preview Definition" },
           D = { "<Cmd>lua vim.lsp.buf.declaration()<CR>", "Declaration" },
           h = { "<cmd>lua vim.lsp.buf.signature_help()<CR>", "Signature Help" },
           i = { "<cmd>Telescope lsp_implementations<CR>", "Goto Implementation" },

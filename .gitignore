@@ -1,3 +1,5 @@
-share
-efm-langserver
-.DS_Store
+*
+
+!nvim
+!alacritty
+!spaceship.zsh

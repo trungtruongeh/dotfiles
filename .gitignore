@@ -1,5 +1,11 @@
 *
 
-!nvim
-!alacritty
+!nvim/*
+
+!alacritty/
+!alacritty/alacritty.toml
+
 !spaceship.zsh
+
+!zellij/
+!zellij/config.kdl

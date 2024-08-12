@@ -37,3 +37,18 @@ keymap("n", "<Left>", ":vertical resize +1<CR>", default_opts)
 keymap("n", "<Right>", ":vertical resize -1<CR>", default_opts)
 keymap("n", "<Up>", ":resize -1<CR>", default_opts)
 keymap("n", "<Down>", ":resize +1<CR>", default_opts)
+
+keymap("n", "<leader>sr", ":%s/<<C-r><C-w>>//g<Left><Left>", default_opts)
+
+-- function SpellToggle()
+--     if vim.opt.spell:get() then
+--         vim.opt_local.spell = false
+--         vim.opt_local.spelllang = "en"
+--     else
+--         vim.opt_local.spell = true
+--         vim.opt_local.spelllang = {"en_us"}
+--     end
+-- end
+--
+-- keymap("n", "<leader>5", ":lua SpellToggle()<cr>", default_opts)
+-- keymap("n", "<leader>z", "[s1z=``", default_opts)

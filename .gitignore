@@ -1,11 +1,11 @@
 *
 
-!nvim/*
+!/nvim/*
 
-!alacritty/
-!alacritty/alacritty.toml
+!/alacritty/
+!/alacritty/alacritty.toml
 
 !spaceship.zsh
 
-!zellij/
-!zellij/config.kdl
+!/zellij/
+!/zellij/config.kdl

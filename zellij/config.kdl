@@ -148,6 +148,7 @@ keybinds {
         bind "Ctrl g" { SwitchToMode "Locked"; }
         bind "Ctrl q" { Quit; }
         bind "Alt n" { NewPane; }
+        bind "Alt d" { NewPane "Down"; SwitchToMode "Normal"; }
         bind "Alt h" "Alt Left" { MoveFocusOrTab "Left"; }
         bind "Alt l" "Alt Right" { MoveFocusOrTab "Right"; }
         bind "Alt j" "Alt Down" { MoveFocus "Down"; }
@@ -269,8 +270,8 @@ plugins {
 // }
 
 themes {
-    everforest-dark {
-        bg "#2b3339"
+    everforest-dark-custom {
+        bg "#6a7074"
         fg "#d3c6aa"
         black "#4b565c"
         red "#e67e80"
@@ -287,12 +288,12 @@ themes {
 // Choose the theme that is specified in the themes section.
 // Default: default
 //
-theme "everforest-dark"
+theme "molokai-dark"
 
 // The name of the default layout to load on startup
 // Default: "default"
 //
-// default_layout "compact"
+default_layout "compact"
 
 // Choose the mode that zellij uses when starting up.
 // Default: normal
@@ -343,7 +344,7 @@ copy_command "pbcopy"                     // osx
 // Path to the default editor to use to edit pane scrollbuffer
 // Default: $EDITOR or $VISUAL
 //
-scrollback_editor "/usr/bin/nvim"
+scrollback_editor "/opt/homebrew/bin/nvim"
 
 // When attaching to an existing session with other users,
 // should the session be mirrored (true)

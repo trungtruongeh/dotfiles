@@ -51,12 +51,12 @@ local function setupCmp()
         symbol_map = { Copilot = "" }
       },
     },
-    sorting = {
-      priority_weight = 2,
-      comparators = {
-        require("copilot_cmp.comparators").prioritize,
-      },
-    }
+    -- sorting = {
+    --   priority_weight = 2,
+    --   comparators = {
+    --     require("copilot_cmp.comparators").prioritize,
+    --   },
+    -- }
   })
 end
 
@@ -174,7 +174,7 @@ return {
 
       local lspconfig = require "lspconfig"
       lspconfig.efm.setup {
-        root_dir = lspconfig.util.root_pattern(".git", "package.json", "Gemfile"),
+        root_dir = lspconfig.util.root_pattern("package.json", "Gemfile"),
         init_options = { documentFormatting = true, codeAction = false },
         filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "ruby", "json", "markdown" },
         settings = {

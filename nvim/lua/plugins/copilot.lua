@@ -7,6 +7,7 @@ return {
     config = function()
       require("copilot").setup({})
     end,
+    enabled = false,
   },
   {
     "zbirenbaum/copilot-cmp",

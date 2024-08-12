@@ -1,15 +1,9 @@
 return {
   "folke/which-key.nvim",
+  tag = 'v2.1.0',
   config = function()
     local whichkey = require "which-key"
     local utils = require "utils"
-
-    local conf = {
-      window = {
-        border = "double", -- none, single, double, shadow
-        position = "bottom", -- bottom, top
-      },
-    }
 
     local opts = {
       mode = "n", -- Normal mode
@@ -57,12 +51,7 @@ return {
         e = { "<cmd>NvimTreeToggle<cr>", "Explorer" },
         p = { "<cmd>Telescope projects<cr>", "Projects" },
         s = { "<cmd>Telescope grep_string<cr>", "Grep String" },
-        r = { "<cmd>Spectre<cr>", "Replace in files (Spectre)" },
-
-      },
-
-      x = {
-        name = "Trouble",
+        r = { "<cmd>Spectre<cr>", "Replace in file" },
       },
 
       g = {
@@ -133,7 +122,7 @@ return {
       end
     end
 
-    whichkey.setup(conf)
+    whichkey.setup()
     whichkey.register(mappings, opts)
 
     code_keymap()

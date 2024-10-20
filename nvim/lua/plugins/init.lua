@@ -1,1 +1,3 @@
+require("plugins.lsp")
+
 return {}

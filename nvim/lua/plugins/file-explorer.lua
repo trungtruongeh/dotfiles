@@ -25,7 +25,7 @@ return {
   },
   {
     "nvim-tree/nvim-tree.lua",
-    lazy = true,
+    event = "VimEnter",
     dependencies = {
       "nvim-tree/nvim-web-devicons",
       "DaikyXendo/nvim-material-icon",
@@ -42,7 +42,7 @@ return {
           relativenumber = true,
         },
         filters = {
-          dotfiles = false
+          dotfiles = true
         },
         sync_root_with_cwd = true,
         update_focused_file = {

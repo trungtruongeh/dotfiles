@@ -1,13 +1,13 @@
 return {
   -- 'github/copilot.vim',
   {
-    '/zbirenbaum/copilot.lua',
+    'zbirenbaum/copilot.lua',
     cmd = "Copilot",
     event = "InsertEnter",
     config = function()
       require("copilot").setup({})
     end,
-    enabled = false,
+    enabled = true,
   },
   {
     "zbirenbaum/copilot-cmp",

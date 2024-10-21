@@ -42,7 +42,7 @@ return {
           relativenumber = true,
         },
         filters = {
-          dotfiles = true
+          dotfiles = false
         },
         sync_root_with_cwd = true,
         update_focused_file = {

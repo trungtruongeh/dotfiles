@@ -11,9 +11,6 @@ opt.ignorecase = true -- search case insensitive
 opt.smartcase = true -- search matters if capital letter
 opt.inccommand = "split" -- "for incsearch while sub
 
-opt.spelllang = 'en_us'
-opt.spell = true
-
 opt.tabstop = 2
 opt.softtabstop = 2
 opt.shiftwidth = 2

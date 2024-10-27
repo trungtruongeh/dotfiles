@@ -1,11 +1,13 @@
-*
+*/**/.DS_Store
 
-!/nvim/*
-
-!/alacritty/
-!/alacritty/alacritty.toml
-
-!spaceship.zsh
-
-!/zellij/
-!/zellij/config.kdl
+.git/
+configstore
+efm-langserver
+flipper
+github-copilot
+gitui/
+hero2
+iterm2
+share
+tmux-powerline
+yarn

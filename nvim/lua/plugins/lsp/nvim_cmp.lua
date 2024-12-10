@@ -18,8 +18,8 @@ function M.setup ()
     preselect = "item",
     sources = cmp.config.sources {
       { name = "copilot", priority = 1 },
-      { name = "nvim_lsp", priority = 2 },
       { name = "path", priority = 3 },
+      { name = "nvim_lsp", priority = 2 },
       { name = "buffer", priority = 4 },
     },
     completion = {
@@ -27,10 +27,21 @@ function M.setup ()
       completeopt = "menu,menuone,noinsert",
     },
     mapping = {
-      ["<CR>"] = cmp.mapping.confirm { select = false },
+      ['<CR>'] = cmp.mapping(function(fallback)
+        if cmp.visible() then
+          cmp.confirm({
+            behavior = cmp.ConfirmBehavior.Insert,
+            select = true
+          }) -- Confirm the selected item, or the first if none is selected
+        else
+          fallback() -- Insert a newline if no completion menu is visible
+        end
+      end, { 'i', 's' }),
+
       ["<C-f>"] = cmp.mapping.scroll_docs(4),
       ["<C-b>"] = cmp.mapping.scroll_docs(-4),
       ['<C-e>'] = cmp.mapping.abort(),
+
       ['<Tab>'] = cmp.mapping(function(fallback)
         if cmp.visible() then
           cmp.select_next_item()
@@ -64,6 +75,25 @@ function M.setup ()
       priority_weight = 1.0,
       comparators = {
         require("copilot_cmp.comparators").prioritize,
+        cmp.config.compare.offset,
+        cmp.config.compare.exact,
+        cmp.config.compare.score,
+        function(entry1, entry2)
+          local kind1 = entry1:get_kind()
+          local kind2 = entry2:get_kind()
+          if kind1 ~= kind2 then
+            if kind1 == cmp.lsp.CompletionItemKind.Snippet then
+              return false
+            end
+            if kind2 == cmp.lsp.CompletionItemKind.Snippet then
+              return true
+            end
+          end
+        end,
+        cmp.config.compare.kind,
+        cmp.config.compare.sort_text,
+        cmp.config.compare.length,
+        cmp.config.compare.order,
       },
     }
   }

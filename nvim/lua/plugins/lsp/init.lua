@@ -35,5 +35,33 @@ return {
     dependencies = { "nvim-lua/lsp-status.nvim" },
     event = "BufReadPre",
     config = lspconfigSetup,
+  },
+
+  {
+    "pmizio/typescript-tools.nvim",
+    event = "BufReadPre",
+    dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+    opts = {},
+    config = function()
+      require("typescript-tools").setup {
+        settings = {
+          tsserver_file_preferences = function(ft)
+            -- Some "ifology" using `ft` of opened file
+            return {
+              includeInlayParameterNameHints = "all",
+              includeCompletionsForModuleExports = true,
+              quotePreference = "auto",
+            }
+            end,
+          tsserver_format_options = function(ft)
+            -- Some "ifology" using `ft` of opened file
+            return {
+              allowIncompleteCompletions = false,
+              allowRenameOfImportPath = false,
+            }
+          end
+        },
+      }
+    end
   }
 }

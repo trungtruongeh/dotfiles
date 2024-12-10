@@ -88,9 +88,9 @@ return {
         elseif ft == "typescript" or ft == "typescriptreact" or ft == "javascript" or ft == "javascriptreact" then
           keymap_c = {
             name = "Code",
-            i = { "<cmd>TypescriptAddMissingImports<cr>", "Import Missing" },
+            i = { "<cmd>TSToolsAddMissingImports<cr>", "Import Missing" },
             F = { "<cmd>EslintFixAll<cr>", "Fix All Eslint Error" },
-            u = { "<cmd>TypescriptRemoveUnused<cr>", "Remove Unused" },
+            u = { "<cmd>TSToolsRemoveUnused<cr>", "Remove Unused" },
             s = { "<cmd>2TermExec cmd='yarn start'<cr>", "Yarn Start" },
             t = { "<cmd>2TermExec cmd='yarn test'<cr>", "Yarn Test" },
             l = { "<cmd>2TermExec cmd='yarn lint --fix'<cr>", "Yarn lint" },

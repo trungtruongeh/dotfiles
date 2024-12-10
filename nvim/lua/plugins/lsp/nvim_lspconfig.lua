@@ -8,7 +8,6 @@ function M.setup()
   lsp_status.register_progress()
   local capabilities = vim.tbl_extend('keep', configCapabilities or {}, lsp_status.capabilities)
 
-
   local on_attach = function(client, bufnr)
   lsp_status.on_attach(client)
 
@@ -44,7 +43,10 @@ function M.setup()
   whichkey.register(keymap_g, o)
   end
 
-  lspconfig.lua_ls.setup {}
+  lspconfig.lua_ls.setup {
+    capabilities = capabilities,
+    on_attach = on_attach
+  }
 
   lspconfig.rust_analyzer.setup {
     capabilities = capabilities,
@@ -65,7 +67,9 @@ function M.setup()
 
   lspconfig.ts_ls.setup {
     capabilities = capabilities,
-    on_attach = on_attach
+    on_attach = function(client, bufrn)
+      on_attach(client, bufrn)
+    end
   }
 
   lspconfig.solargraph.setup {

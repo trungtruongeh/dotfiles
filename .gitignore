@@ -1,13 +1,9 @@
-*/**/.DS_Store
+*
 
-.git/
-configstore
-efm-langserver
-flipper
-github-copilot
-gitui/
-hero2
-iterm2
-share
-tmux-powerline
-yarn
+!.gitignore
+!README.md
+!nvim
+!alacritty
+!zellij
+!spaceship.zsh
+!spaceship.zsh.zwc

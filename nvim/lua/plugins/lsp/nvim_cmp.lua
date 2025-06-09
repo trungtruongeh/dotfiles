@@ -14,11 +14,12 @@ end
 function M.setup()
   local cmp = require "cmp"
 
-  require("luasnip.loaders.from_vscode").lazy_load({
-    paths = { '/snippets' }
-  })
+  -- require("luasnip.loaders.from_vscode").lazy_load({
+  --   paths = { '/snippets' }
+  -- })
 
   cmp.setup {
+    preselect = "item",
     snippet = {
       expand = function(args)
         require('luasnip').lsp_expand(args.body)
@@ -27,8 +28,8 @@ function M.setup()
     preselect = "item",
     sources = cmp.config.sources {
       { name = "copilot",  priority = 1 },
-      { name = "path",     priority = 3 },
       { name = "nvim_lsp", priority = 2 },
+      { name = "path",     priority = 3 },
       { name = "buffer",   priority = 4 },
     },
     completion = {

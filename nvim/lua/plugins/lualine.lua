@@ -1,9 +1,10 @@
 return {
   { "SmiteshP/nvim-gps" },
+  { 'WhoIsSethDaniel/lualine-lsp-progress.nvim' },
   {
     'nvim-lualine/lualine.nvim',
     event = "BufReadPre",
-    dependencies = { 'nvim-tree/nvim-web-devicons', 'folke/noice.nvim', opt = true },
+    dependencies = { 'nvim-tree/nvim-web-devicons', 'WhoIsSethDaniel/lualine-lsp-progress.nvim', 'folke/noice.nvim', opt = true },
     options = { theme = 'everforest' },
     config = function()
       local gps = require "nvim-gps"
@@ -37,6 +38,7 @@ return {
               cond = gps.is_available,
               color = { fg = "#f3ca28" },
             },
+            'lsp_progress',
           },
           lualine_x = {
             {

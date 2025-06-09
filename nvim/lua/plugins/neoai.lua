@@ -1,5 +1,6 @@
 return {
   "Bryley/neoai.nvim",
+  enabled = false,
   dependencies = {
     "MunifTanjim/nui.nvim",
   },
@@ -40,7 +41,7 @@ return {
       open_ai = {
         api_key = {
           env = "OPENAI_API_KEY",
-          value = "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",
+          value = "",
           -- `get` is is a function that retrieves an API key, can be used to override the default method.
           -- get = function() ... end
 

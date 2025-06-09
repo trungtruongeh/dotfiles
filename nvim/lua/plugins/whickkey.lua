@@ -1,9 +1,9 @@
 return {
   "folke/which-key.nvim",
   tag = 'v2.1.0',
+  lazy = false,
   config = function()
     local whichkey = require "which-key"
-    local utils = require "utils"
 
     local opts = {
       mode = "n", -- Normal mode
@@ -17,13 +17,13 @@ return {
     local mappings = {
       ["1"] = { "<cmd>ToggleTerm<CR>", "Open Terminal" },
       ["2"] = { "<cmd>TransparentToggle<CR>", "Toggle background transparent" },
-      ["3"] = { "<cmd>NeoAI<CR>", "Toggle ChatGPT" },
       ["w"] = { "<cmd>update!<CR>", "Save" },
       ["q"] = { "<cmd>q!<CR>", "Quit" },
 
       a = {
-        name = "AI",
-        t = { "<cmd>NeoAIToggle<CR>", "NeoAI Toggle" },
+        name = "AI - CodeCompanian",
+        a = { "<cmd>CodeCompanionActions<CR>", "Actions Palette" },
+        t = { "<cmd>CodeCompanionChat Toggle<CR>", "Toggle Chat" },
       },
 
       b = {

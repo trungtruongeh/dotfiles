@@ -11,16 +11,25 @@ local t = function(str)
   return vim.api.nvim_replace_termcodes(str, true, true, true)
 end
 
-function M.setup ()
+function M.setup()
   local cmp = require "cmp"
 
+  require("luasnip.loaders.from_vscode").lazy_load({
+    paths = { '/snippets' }
+  })
+
   cmp.setup {
+    snippet = {
+      expand = function(args)
+        require('luasnip').lsp_expand(args.body)
+      end,
+    },
     preselect = "item",
     sources = cmp.config.sources {
-      { name = "copilot", priority = 1 },
-      { name = "path", priority = 3 },
+      { name = "copilot",  priority = 1 },
+      { name = "path",     priority = 3 },
       { name = "nvim_lsp", priority = 2 },
-      { name = "buffer", priority = 4 },
+      { name = "buffer",   priority = 4 },
     },
     completion = {
       autocomplete = false,
@@ -32,7 +41,7 @@ function M.setup ()
           cmp.confirm({
             behavior = cmp.ConfirmBehavior.Insert,
             select = true
-          }) -- Confirm the selected item, or the first if none is selected
+          })         -- Confirm the selected item, or the first if none is selected
         else
           fallback() -- Insert a newline if no completion menu is visible
         end
@@ -46,9 +55,9 @@ function M.setup ()
         if cmp.visible() then
           cmp.select_next_item()
         elseif has_words_before() then
-            cmp.complete()
+          cmp.complete()
         else
-          fallback() -- If nothing else is matched, use fallback
+          fallback()      -- If nothing else is matched, use fallback
         end
       end, { "i", "s" }), -- Enable in insert and select modes
 
@@ -98,19 +107,18 @@ function M.setup ()
     }
   }
 
-
   -- Use completion in command-line mode
   cmp.setup.cmdline('/', {
-      sources = {
-          { name = 'buffer' }
-      }
+    sources = {
+      { name = 'buffer' }
+    }
   })
 
   cmp.setup.cmdline(':', {
     sources = cmp.config.sources({
       { name = 'path' }
     }, {
-        { name = 'cmdline' }
+      { name = 'cmdline' }
     })
   })
 end

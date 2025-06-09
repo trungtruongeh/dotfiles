@@ -17,21 +17,23 @@ local rubocop = {
 }
 
 return {
-  {'williamboman/mason.nvim'},
-  {'williamboman/mason-lspconfig.nvim'},
+  { 'williamboman/mason.nvim' },
+  { 'williamboman/mason-lspconfig.nvim' },
   { 'hrsh7th/cmp-nvim-lsp' },
   { 'L3MON4D3/LuaSnip' },
-  { "onsails/lspkind.nvim" }, 
+  { "onsails/lspkind.nvim" },
   { 'nvim-lua/lsp-status.nvim' },
 
   {
     'hrsh7th/nvim-cmp',
+    version = false,
     event = "BufReadPre",
     config = cmpSetup,
   },
 
   {
     'neovim/nvim-lspconfig',
+    version = false,
     dependencies = { "nvim-lua/lsp-status.nvim" },
     event = "BufReadPre",
     config = lspconfigSetup,
@@ -52,7 +54,7 @@ return {
               includeCompletionsForModuleExports = true,
               quotePreference = "auto",
             }
-            end,
+          end,
           tsserver_format_options = function(ft)
             -- Some "ifology" using `ft` of opened file
             return {
@@ -63,5 +65,13 @@ return {
         },
       }
     end
-  }
+  },
+
+  {
+    'esmuellert/nvim-eslint',
+    event = "BufReadPre",
+    config = function()
+      require('nvim-eslint').setup({})
+    end
+  },
 }

@@ -1,6 +1,6 @@
 return {
   "nvim-treesitter/nvim-treesitter",
-  version = false, -- last release is way too old and doesn't work on Windows
+  version = "v0.9.0",
   build = ":TSUpdate",
   event = { "BufReadPost", "BufNewFile" },
   dependencies = {
@@ -18,7 +18,7 @@ return {
   cmd = { "TSUpdateSync" },
   keys = {
     { "<c-space>", desc = "Increment selection" },
-    { "<bs>", desc = "Decrement selection", mode = "x" },
+    { "<bs>",      desc = "Decrement selection", mode = "x" },
   },
   ---@type TSConfig
   opts = {
@@ -27,6 +27,7 @@ return {
     ensure_installed = {
       "bash",
       "c",
+      "query",
       "html",
       "javascript",
       "json",

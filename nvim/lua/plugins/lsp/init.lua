@@ -47,7 +47,7 @@ return {
     config = function()
       require("typescript-tools").setup {
         settings = {
-          separate_diagnostic_server = true,
+          separate_diagnostic_server = false,
           tsserver_file_preferences = function(ft)
             return {
               includeInlayParameterNameHints = "all",

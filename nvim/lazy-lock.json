@@ -59,8 +59,9 @@
   "transparent.nvim": { "branch": "main", "commit": "8a2749a2fa74f97fe6557f61b89ac7fd873f3c21" },
   "trouble.nvim": { "branch": "main", "commit": "971ad925ff6fdb57950d7c5d4c5d65e2cdbaecec" },
   "typescript-tools.nvim": { "branch": "master", "commit": "35e397ce467bedbbbb5bfcd0aa79727b59a08d4a" },
-  "vim-bundler": { "branch": "master", "commit": "c261509e78fc8dc55ad1fcf3cd7cdde49f35435c" },
+  "vim-endwise": { "branch": "master", "commit": "eab530110d7a0d985902a3964894816b50dbf31a" },
   "vim-illuminate": { "branch": "master", "commit": "19cb21f513fc2b02f0c66be70107741e837516a1" },
   "vim-rails": { "branch": "master", "commit": "b0a5c76f86ea214ade36ab0b811e730c3f0add67" },
+  "vim-ruby": { "branch": "master", "commit": "bf3a5994ce63796db7b1b04aea92772271f387aa" },
   "which-key.nvim": { "branch": "main", "commit": "0539da005b98b02cf730c1d9da82b8e8edb1c2d2" }
 }

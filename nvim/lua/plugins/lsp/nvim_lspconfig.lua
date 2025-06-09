@@ -82,12 +82,10 @@ function M.setup()
 
   lspconfig.solargraph.setup {
     filetypes = { 'ruby' },
-    init_options = {
-      formatting = true,
-    },
     settings = {
       solargraph = {
         diagnostics = true,     -- Enable diagnostics
+        formatting = true,
       },
     },
     capabilities = capabilities,

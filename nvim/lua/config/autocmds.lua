@@ -87,6 +87,26 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
   end,
 })
 
+vim.api.nvim_create_autocmd('BufEnter', {
+  group = augroup("no_plugin"),
+  -- Pattern: A list of file extensions to target.
+  pattern = { '*.log', '*.tmp', '*.csv' },
+  desc = 'Disable plugins for large/simple file types.',
+  callback = function(args)
+    -- This logic runs ONLY for buffers matching the pattern.
+    -- It sets the filetype to a generic 'text' for basic syntax.
+    vim.bo[args.buf].filetype = 'text'
+    -- This flag prevents filetype-specific plugins from loading.
+    vim.b[args.buf].did_ftplugin = 1
+    -- Stop the LSP from attaching to this buffer.
+    vim.b[args.buf].lsp_attached = false
+    vim.b[args.buf].autoformat = false -- If you use an auto-formatter
+    vim.notify('Plugin-mode disabled for ' .. args.file, vim.log.levels.INFO, {
+      title = 'No Plugin Mode',
+    })
+  end,
+})
+
 -- Auto save when exit insert mode
 vim.cmd([[
   augroup autosave

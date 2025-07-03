@@ -1,27 +1,29 @@
-return {
-  "olimorris/codecompanion.nvim",
-  event = "VeryLazy",
-  version = false, -- Never set this value to "*"! Never!
-  enabled = false,
-  dependencies = {
-    "nvim-lua/plenary.nvim",
-    "nvim-treesitter/nvim-treesitter",
-  },
-  config = function()
-    require("codecompanion").setup({
-      strategies = {
-        chat = {
-          adapter = "copilot",
-        },
-        inline = {
-          adapter = "copilot",
-        },
-      },
-      display = {
-        chat = {
-          show_settings = true,
-        }
-      }
-    })
-  end
-}
+return {}
+
+-- return {
+--   "olimorris/codecompanion.nvim",
+--   event = "VeryLazy",
+--   version = false, -- Never set this value to "*"! Never!
+--   enabled = false,
+--   dependencies = {
+--     "nvim-lua/plenary.nvim",
+--     "nvim-treesitter/nvim-treesitter",
+--   },
+--   config = function()
+--     require("codecompanion").setup({
+--       strategies = {
+--         chat = {
+--           adapter = "copilot",
+--         },
+--         inline = {
+--           adapter = "copilot",
+--         },
+--       },
+--       display = {
+--         chat = {
+--           show_settings = true,
+--         }
+--       }
+--     })
+--   end
+-- }

@@ -45,8 +45,9 @@ return {
           end,
           tsserver_format_options = function(ft)
             return {
-              allowIncompleteCompletions = false,
-              allowRenameOfImportPath = false,
+              allowIncompleteCompletions = true,
+              allowRenameOfImportPath = true,
+              documentFormattingProvider = false,
             }
           end
         },
@@ -61,7 +62,7 @@ return {
           u = { "<cmd>TSToolsRemoveUnusedImports<CR>", "remove all unsued imports" },
           U = { "<cmd>TSToolsRemoveUnused<CR>", "remove all unsued statements" },
           f = { "<cmd>lua vim.lsp.buf.format({async = true})<CR>", "Format Document" },
-          r = { "<cmd>TSToolsFileReferences<CR>", "reference file" },
+          r = { "<cmd>lua vim.lsp.buf.rename()<CR>", "Rename" },
           R = { "<cmd>TSToolsRenameFile<CR>", "Rename file" },
         }
       };

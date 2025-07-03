@@ -69,66 +69,66 @@ return {
       vim.api.nvim_create_autocmd("FileType", {
         pattern = "*",
         callback = function()
-          vim.schedule(CodeRunner)
+          -- vim.schedule(CodeRunner)
         end,
       })
 
-      function CodeRunner()
-        local bufnr = vim.api.nvim_get_current_buf()
-        local ft = vim.api.nvim_buf_get_option(bufnr, "filetype")
-        local fname = vim.fn.expand "%:p:t"
-        local keymap_c = {} -- normal key map
-        local keymap_c_v = {} -- visual key map
-
-        if ft == "lua" then
-          keymap_c = {
-            name = "Code",
-            r = { "<cmd>luafile %<cr>", "Run" },
-          }
-        elseif ft == "typescript" or ft == "typescriptreact" or ft == "javascript" or ft == "javascriptreact" then
-          keymap_c = {
-            name = "Code",
-            i = { "<cmd>TSToolsAddMissingImports<cr>", "Import Missing" },
-            F = { "<cmd>EslintFixAll<cr>", "Fix All Eslint Error" },
-            u = { "<cmd>TSToolsRemoveUnused<cr>", "Remove Unused" },
-            s = { "<cmd>2TermExec cmd='yarn start'<cr>", "Yarn Start" },
-            t = { "<cmd>2TermExec cmd='yarn test'<cr>", "Yarn Test" },
-            l = { "<cmd>2TermExec cmd='yarn lint --fix'<cr>", "Yarn lint" },
-          }
-        elseif ft == "rust" then
-          keymap_c = {
-            name = "Code",
-            r = { "<cmd>2TermExec cmd='cargo run'<cr>", "Cargo run" },  
-            b = { "<cmd>2TermExec cmd='cargo build'<cr>", "Cargo build" },  
-          }
-        end
-
-        if fname == "package.json" then
-          keymap_c.v = { "<cmd>lua require('package-info').show()<cr>", "Show Version" }
-          keymap_c.c = { "<cmd>lua require('package-info').change_version()<cr>", "Change Version" }
-          -- keymap_c.s = { "<cmd>2TermExec cmd='yarn start'<cr>", "Yarn Start" }
-          -- keymap_c.t = { "<cmd>2TermExec cmd='yarn test'<cr>", "Yarn Test" }
-        end
-
-        if next(keymap_c) ~= nil then
-          local k = { c = keymap_c }
-          local o = { mode = "n", silent = true, noremap = true, buffer = bufnr, prefix = "<leader>", nowait = true }
-          whichkey.register(k, o)
-          -- legendary.bind_whichkey(k, o, false)
-        end
-
-        if next(keymap_c_v) ~= nil then
-          local k = { c = keymap_c_v }
-          local o = { mode = "v", silent = true, noremap = true, buffer = bufnr, prefix = "<leader>", nowait = true }
-          whichkey.register(k, o)
-          -- legendary.bind_whichkey(k, o, false)
-        end
-      end
+      -- function CodeRunner()
+      --   local bufnr = vim.api.nvim_get_current_buf()
+      --   local ft = vim.api.nvim_buf_get_option(bufnr, "filetype")
+      --   local fname = vim.fn.expand "%:p:t"
+      --   local keymap_c = {} -- normal key map
+      --   local keymap_c_v = {} -- visual key map
+      --
+      --   if ft == "lua" then
+      --     keymap_c = {
+      --       name = "Code",
+      --       r = { "<cmd>luafile %<cr>", "Run" },
+      --     }
+      --   elseif ft == "typescript" or ft == "typescriptreact" or ft == "javascript" or ft == "javascriptreact" then
+      --     keymap_c = {
+      --       name = "Code",
+      --       i = { "<cmd>TSToolsAddMissingImports<cr>", "Import Missing" },
+      --       F = { "<cmd>EslintFixAll<cr>", "Fix All Eslint Error" },
+      --       u = { "<cmd>TSToolsRemoveUnused<cr>", "Remove Unused" },
+      --       s = { "<cmd>2TermExec cmd='yarn start'<cr>", "Yarn Start" },
+      --       t = { "<cmd>2TermExec cmd='yarn test'<cr>", "Yarn Test" },
+      --       l = { "<cmd>2TermExec cmd='yarn lint --fix'<cr>", "Yarn lint" },
+      --     }
+      --   elseif ft == "rust" then
+      --     keymap_c = {
+      --       name = "Code",
+      --       r = { "<cmd>2TermExec cmd='cargo run'<cr>", "Cargo run" },  
+      --       b = { "<cmd>2TermExec cmd='cargo build'<cr>", "Cargo build" },  
+      --     }
+      --   end
+      --
+      --   if fname == "package.json" then
+      --     keymap_c.v = { "<cmd>lua require('package-info').show()<cr>", "Show Version" }
+      --     keymap_c.c = { "<cmd>lua require('package-info').change_version()<cr>", "Change Version" }
+      --     -- keymap_c.s = { "<cmd>2TermExec cmd='yarn start'<cr>", "Yarn Start" }
+      --     -- keymap_c.t = { "<cmd>2TermExec cmd='yarn test'<cr>", "Yarn Test" }
+      --   end
+      --
+      --   if next(keymap_c) ~= nil then
+      --     local k = { c = keymap_c }
+      --     local o = { mode = "n", silent = true, noremap = true, buffer = bufnr, prefix = "<leader>", nowait = true }
+      --     whichkey.register(k, o)
+      --     -- legendary.bind_whichkey(k, o, false)
+      --   end
+      --
+      --   if next(keymap_c_v) ~= nil then
+      --     local k = { c = keymap_c_v }
+      --     local o = { mode = "v", silent = true, noremap = true, buffer = bufnr, prefix = "<leader>", nowait = true }
+      --     whichkey.register(k, o)
+      --     -- legendary.bind_whichkey(k, o, false)
+      --   end
+      -- end
     end
 
     whichkey.setup()
     whichkey.register(mappings, opts)
 
-    code_keymap()
+    -- code_keymap()
   end,
 }

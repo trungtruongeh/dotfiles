@@ -1,12 +1,16 @@
 local M = {}
 
 local eslint = {
-  lintCommand = "eslint_d -f unix --stdin --stdin-filename ${INPUT}",
+  lintCommand = "eslint_d -f compact --stdin --stdin-filename ${INPUT}", -- unix format failed to report severity
   lintStdin = true,
-  lintFormats = { "%f:%l:%c: %m" },
+  lintFormats = { "%f: line %l, col %c, %t%m" },
   lintIgnoreExitCode = true,
   formatCommand = "eslint_d --fix-to-stdout --stdin --stdin-filename=${INPUT}",
-  formatStdin = true
+  formatStdin = true,
+  securities = {
+    W = 'warning',
+    E = 'error',
+  }
 }
 
 local prettier = {
@@ -25,6 +29,19 @@ local rubocop = {
 }
 
 function M.setup()
+  vim.fn.sign_define('DiagnosticSignError', { text = '', texthl = 'DiagnosticError' })
+  vim.fn.sign_define('DiagnosticSignWarn', { text = '', texthl = 'DiagnosticWarn' })
+  vim.fn.sign_define('DiagnosticSignInfo', { text = '', texthl = 'DiagnosticInfo' })
+  vim.fn.sign_define('DiagnosticSignHint', { text = '', texthl = 'DiagnosticHint' })
+
+  vim.diagnostic.config({
+    signs = true,
+    underline = true,
+    virtual_text = false, -- or configure as you like
+    update_in_insert = true,
+    severity_sort = true,
+  })
+
   local lspconfig = require "lspconfig"
   local lsp_status = require "lsp-status"
   local configCapabilities = require('cmp_nvim_lsp').default_capabilities()
@@ -45,7 +62,7 @@ function M.setup()
 
     local keymap_c = {
       c = {
-        R = { "<cmd>lua vim.lsp.buf.rename()<CR>", "Rename" },
+        r = { "<cmd>lua vim.lsp.buf.rename()<CR>", "Rename" },
       }
     };
 
@@ -84,7 +101,7 @@ function M.setup()
     filetypes = { 'ruby' },
     settings = {
       solargraph = {
-        diagnostics = true,     -- Enable diagnostics
+        diagnostics = true, -- Enable diagnostics
         formatting = true,
       },
     },
@@ -94,13 +111,26 @@ function M.setup()
     end,
   }
 
-  lspconfig.ruby_lsp.setup {
-    capabilities = capabilities,
-    on_attach = on_attach
-  }
+  -- lspconfig.ruby_lsp.setup {
+  --   filetypes = { 'ruby' },
+  --   init_options = {
+  --     formatter = 'standard',
+  --     linters = { 'standard' },
+  --   },
+  --   settings = {
+  --     solargraph = {
+  --       diagnostics = true,     -- Enable diagnostics
+  --       formatting = true,
+  --     },
+  --   },
+  --   capabilities = capabilities,
+  --   on_attach = function(client)
+  --     on_attach(client, bufrn)
+  --   end,
+  -- }
 
   lspconfig.efm.setup {
-    root_dir = lspconfig.util.root_pattern("package.json", "Gemfile"),
+    root_dir = lspconfig.util.root_pattern(".git", "package.json", '.eslintrc.js', '.eslintrc.json', "Gemfile"),
     init_options = { documentFormatting = true, codeAction = false },
     filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "ruby", "json", "markdown" },
     settings = {

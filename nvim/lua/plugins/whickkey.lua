@@ -35,6 +35,10 @@ return {
         a = { "<cmd>lua vim.lsp.buf.code_action()<CR>", "Code Action" },
       },
 
+      d = {
+        name = "Debug"
+      },
+
       C = {
         name = "Circle CI",
         a = { "<cmd>CCMyPipelines<cr>", "List and open" },
@@ -52,6 +56,7 @@ return {
         p = { "<cmd>Telescope projects<cr>", "Projects" },
         s = { "<cmd>Telescope grep_string<cr>", "Grep String" },
         r = { "<cmd>Spectre<cr>", "Replace in file" },
+        m = { "<cmd>Telescope bookmarks list<cr>", "Bookmarks" },
       },
 
       g = {

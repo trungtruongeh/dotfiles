@@ -1,17 +1,17 @@
 local lspconfigSetup = require("plugins.lsp.nvim_lspconfig").setup
 local cmpSetup = require("plugins.lsp.nvim_cmp").setup
 
+local jsPlugins = require('plugins.lsp.javascript')
+local rubyPlugins = require('plugins.lsp.ruby')
+
 return {
-  { 'williamboman/mason.nvim' },
-  { 'williamboman/mason-lspconfig.nvim' },
+  -- { 'williamboman/mason.nvim' },
+  -- { 'williamboman/mason-lspconfig.nvim' },
   { 'hrsh7th/cmp-nvim-lsp' },
   { 'L3MON4D3/LuaSnip' },
   { "onsails/lspkind.nvim" },
   { 'nvim-lua/lsp-status.nvim' },
-  { 'tpope/vim-endwise', ft = { 'ruby' } },
-  { 'tpope/vim-rails', ft = { 'ruby' } },
-  { 'vim-ruby/vim-ruby', ft = { 'ruby' } },
-
+ 
   {
     'hrsh7th/nvim-cmp',
     version = false,
@@ -27,63 +27,6 @@ return {
     config = lspconfigSetup,
   },
 
-  {
-    "pmizio/typescript-tools.nvim",
-    event = "BufReadPre",
-    dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
-    opts = {},
-    config = function()
-      require("typescript-tools").setup {
-        settings = {
-          separate_diagnostic_server = false,
-          tsserver_file_preferences = function(ft)
-            return {
-              includeInlayParameterNameHints = "all",
-              includeCompletionsForModuleExports = true,
-              quotePreference = "auto",
-            }
-          end,
-          tsserver_format_options = function(ft)
-            return {
-              allowIncompleteCompletions = true,
-              allowRenameOfImportPath = true,
-              documentFormattingProvider = false,
-            }
-          end
-        },
-      }
-
-      local whichkey = require "which-key"
-
-      local keymap_c = {
-        c = {
-          i = { "<cmd>TSToolsAddMissingImports<CR>", "add missing import" },
-          I = { "<cmd>TSToolsOrganizeImports<CR>", "organise imports" },
-          u = { "<cmd>TSToolsRemoveUnusedImports<CR>", "remove all unsued imports" },
-          U = { "<cmd>TSToolsRemoveUnused<CR>", "remove all unsued statements" },
-          f = { "<cmd>lua vim.lsp.buf.format({async = true})<CR>", "Format Document" },
-          r = { "<cmd>lua vim.lsp.buf.rename()<CR>", "Rename" },
-          R = { "<cmd>TSToolsRenameFile<CR>", "Rename file" },
-        }
-      };
-
-      local o = { buffer = bufnr, prefix = "<leader>" }
-      whichkey.register(keymap_c, o)
-
-      local keymap_g = {
-        name = "Goto",
-        d = { "<Cmd>lua vim.lsp.buf.definition()<CR>", "Definition" },
-        D = { "<Cmd>lua vim.lsp.buf.declaration()<CR>", "Declaration" },
-        h = { "<cmd>lua vim.lsp.buf.signature_help()<CR>", "Signature Help" },
-        i = { "<cmd>Telescope lsp_implementations<CR>", "Goto Implementation" },
-        t = { "<cmd>lua vim.lsp.buf.type_definition()<CR>", "Goto Type Definition" },
-        r = { "<cmd>lua vim.lsp.buf.references()<CR>", "References" },
-      }
-
-      o = { buffer = bufnr, prefix = "g" }
-      whichkey.register(keymap_g, o)
-    end
-  },
-
-
+  jsPlugins,
+  rubyPlugins,
 }

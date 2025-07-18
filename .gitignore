@@ -4,8 +4,11 @@
 !README.md
 
 !nvim/
+!nvim/**
 !alacritty/
+!alacritty/**
 !zellij/
+!zellij/**
 
 !spaceship.zsh
 !spaceship.zsh.zwc

@@ -2,8 +2,10 @@
 
 !.gitignore
 !README.md
-!nvim
-!alacritty
-!zellij
+
+!nvim/
+!alacritty/
+!zellij/
+
 !spaceship.zsh
 !spaceship.zsh.zwc

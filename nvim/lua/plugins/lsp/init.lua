@@ -3,6 +3,7 @@ local cmpSetup = require("plugins.lsp.nvim_cmp").setup
 
 local jsPlugins = require('plugins.lsp.javascript')
 local rubyPlugins = require('plugins.lsp.ruby')
+local goPlugins = require('plugins.lsp.go')
 
 return {
   -- { 'williamboman/mason.nvim' },
@@ -29,4 +30,5 @@ return {
 
   jsPlugins,
   rubyPlugins,
+  goPlugins,
 }
